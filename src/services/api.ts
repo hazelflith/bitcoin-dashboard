@@ -40,10 +40,11 @@ export const fetchBitcoinData = async (): Promise<BitcoinData[]> => {
 
 export const fetchMacroData = async () => {
   try {
-    // Fetch macroeconomic indicators
+    // Use a CORS proxy for CoinGecko global endpoint
+    const corsProxy = 'https://corsproxy.io/?';
     const [fearGreedResponse, dominanceResponse] = await Promise.all([
       axios.get('https://api.alternative.me/fng/'),
-      axios.get(`${COINGECKO_API}/global`),
+      axios.get(`${corsProxy}https://api.coingecko.com/api/v3/global`),
     ]);
 
     return {
