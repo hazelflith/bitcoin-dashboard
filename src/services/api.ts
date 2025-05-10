@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const COINGECKO_API = 'https://pro-api.coingecko.com/api/v3';
-const COINGECKO_API_KEY = process.env.REACT_APP_COINGECKO_API_KEY;
+const COINGECKO_API = 'https://api.coingecko.com/api/v3';
 
 export interface BitcoinData {
   timestamp: number;
@@ -20,11 +19,6 @@ export const fetchBitcoinData = async (): Promise<BitcoinData[]> => {
           vs_currency: 'usd',
           days: '30',
           interval: 'hourly',
-        },
-        headers: {
-          'x-cg-pro-api-key': COINGECKO_API_KEY,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
       }
     );
@@ -49,13 +43,7 @@ export const fetchMacroData = async () => {
     // Fetch macroeconomic indicators
     const [fearGreedResponse, dominanceResponse] = await Promise.all([
       axios.get('https://api.alternative.me/fng/'),
-      axios.get(`${COINGECKO_API}/global`, {
-        headers: {
-          'x-cg-pro-api-key': COINGECKO_API_KEY,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }),
+      axios.get(`${COINGECKO_API}/global`),
     ]);
 
     return {
