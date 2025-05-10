@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Typography, Box } from '@mui/material';
-import PriceChart from './PriceChart.tsx';
 import TechnicalAnalysis from './TechnicalAnalysis.tsx';
 import MacroAnalysis from './MacroAnalysis.tsx';
-import PricePredictions from './PricePredictions.tsx';
+import PricePrediction from './PricePrediction.tsx';
 import { fetchBitcoinData } from '../services/api.ts';
 
 const Dashboard: React.FC = () => {
@@ -30,16 +29,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <Grid container spacing={3}>
-      {/* Price Chart Section */}
-      <Grid item xs={12}>
-        <Paper sx={{ p: 3, height: '400px' }}>
-          <Typography variant="h2" gutterBottom>
-            Bitcoin Price
-          </Typography>
-          <PriceChart data={priceData} loading={loading} />
-        </Paper>
-      </Grid>
-
       {/* Technical Analysis Section */}
       <Grid item xs={12} md={6}>
         <Paper sx={{ p: 3, height: '400px' }}>
@@ -60,14 +49,9 @@ const Dashboard: React.FC = () => {
         </Paper>
       </Grid>
 
-      {/* Price Predictions Section */}
+      {/* Price Prediction Section */}
       <Grid item xs={12}>
-        <Paper sx={{ p: 3, height: '400px' }}>
-          <Typography variant="h2" gutterBottom>
-            Price Predictions
-          </Typography>
-          <PricePredictions data={priceData} loading={loading} />
-        </Paper>
+        <PricePrediction />
       </Grid>
     </Grid>
   );

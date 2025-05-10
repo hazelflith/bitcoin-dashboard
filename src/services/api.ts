@@ -4,35 +4,35 @@ const COINGECKO_API = 'https://api.coingecko.com/api/v3';
 
 export interface BitcoinData {
   timestamp: number;
-  price: number;
-  volume: number;
-  marketCap: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
 }
 
 export const fetchBitcoinData = async (): Promise<BitcoinData[]> => {
   try {
-    // Fetch historical data for the last 30 days
+    // Fetch OHLC data for the last 30 days
     const response = await axios.get(
-      `${COINGECKO_API}/coins/bitcoin/market_chart`,
+      `${COINGECKO_API}/coins/bitcoin/ohlc`,
       {
         params: {
           vs_currency: 'usd',
           days: '30',
-          interval: 'hourly',
         },
       }
     );
 
-    const { prices, total_volumes, market_caps } = response.data;
-
-    return prices.map((price: [number, number], index: number) => ({
-      timestamp: price[0],
-      price: price[1],
-      volume: total_volumes[index][1],
-      marketCap: market_caps[index][1],
+    // Response format: [timestamp, open, high, low, close]
+    return response.data.map((item: [number, number, number, number, number]) => ({
+      timestamp: item[0],
+      open: item[1],
+      high: item[2],
+      low: item[3],
+      close: item[4],
     }));
   } catch (error) {
-    console.error('Error fetching Bitcoin data:', error);
+    console.error('Error fetching Bitcoin OHLC data:', error);
     // Return mock data if API fails
     return generateMockData();
   }
@@ -67,12 +67,16 @@ const generateMockData = (): BitcoinData[] => {
   
   for (let i = 30; i >= 0; i--) {
     const timestamp = now - (i * 24 * 60 * 60 * 1000);
-    const basePrice = 40000 + Math.random() * 10000;
+    const open = 40000 + Math.random() * 10000;
+    const close = open + (Math.random() - 0.5) * 2000;
+    const high = Math.max(open, close) + Math.random() * 1000;
+    const low = Math.min(open, close) - Math.random() * 1000;
     data.push({
       timestamp,
-      price: basePrice,
-      volume: basePrice * 1000000,
-      marketCap: basePrice * 19000000,
+      open,
+      high,
+      low,
+      close,
     });
   }
   
